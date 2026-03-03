@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,8 +16,10 @@ public class NormalShooter : MonoBehaviour
     public float shootSpeed = 10.0f; //弾速
 
     GameObject bullets; //生成した弾をまとめるオブジェクト
-    
+
     //InputAction(Playerマップ)のAttackアクションがおされたら
+
+
     void OnAttack(InputValue value)
     {
         Shoot();
@@ -24,11 +27,25 @@ public class NormalShooter : MonoBehaviour
 
     void Shoot()
     {
-       
+        if (bulletManager.GetBulletRemaining() > 0)
+        {
+            GameObject obj = Instantiate(
+                bulletPrefabs,
+                gate.transform.position,
+                Quaternion.Euler(90, 0, 0)
+                );
+            bulletManager.ConsumeBullet();
+            Rigidbody bulletRbody = obj.GetComponent<Rigidbody>();
+            bulletRbody.AddForce(new Vector3(0, 0, 1) * shootSpeed, ForceMode.Impulse);
+        }
+        else
+        {
+            bulletManager.RecoverBullet();
+        }
     }
 
     void Start()
     {
-        
-    }    
+
+    }
 }
