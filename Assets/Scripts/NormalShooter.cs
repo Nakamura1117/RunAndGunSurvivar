@@ -32,7 +32,8 @@ public class NormalShooter : MonoBehaviour
             GameObject obj = Instantiate(
                 bulletPrefabs,
                 gate.transform.position,
-                Quaternion.Euler(90, 0, 0)
+                Quaternion.Euler(90, 0, 0),
+                bullets.transform
                 );
             bulletManager.ConsumeBullet();
             Rigidbody bulletRbody = obj.GetComponent<Rigidbody>();
@@ -46,6 +47,6 @@ public class NormalShooter : MonoBehaviour
 
     void Start()
     {
-
+        bullets = GameObject.FindGameObjectWithTag("Bullets");
     }
 }

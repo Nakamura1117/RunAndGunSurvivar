@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Wall : MonoBehaviour
@@ -16,30 +17,58 @@ public class Wall : MonoBehaviour
     public float amplitude = 1.5f;  //振動量
 
     Vector3 startPosition; //振動対象の初期位置
-    float z; //振動による移動座標
+    float x; //振動による移動座標
 
     Coroutine currentDamage; //ダメージコルーチン
 
     void Start()
     {
-       
+        startPosition = damageBody.transform.localPosition;
     }
 
     void Update()
     {
-        
+        if (currentDamage != null)
+        {
+            x = (amplitude * 0.01f) * Mathf.Sin(Time.time * speed);
+            damageBody.transform.localPosition = startPosition - new Vector3(x, 0, 0);
+        }
     }
 
     //衝突
     void OnTriggerEnter(Collider other)
     {
-      
+        if (other.gameObject.tag == "Bullets")
+        {
+            if (currentDamage != null) return;
+            currentDamage = StartCoroutine(DamageCol());
+            if (life <= 0)
+            {
+                CreateEffect();
+            }
+        }
     }
 
+    public void CreateEffect()
+    {
+        if (effectPrefab != null)
+        {
+            Instantiate(
+                effectPrefab,
+                transform.position,
+                Quaternion.identity,
+                gameObject.transform);
+            Destroy(gameObject);
+        }
+    }
     //ダメージコルーチン
     IEnumerator DamageCol()
-    {        
+    {
+        life--;
+        yield return new WaitForSeconds(damegeTime);
+        currentDamage = null;
         yield return new WaitForSeconds(0.1f);
-        
+        damageBody.transform.localPosition = startPosition;
+
     }
 }
