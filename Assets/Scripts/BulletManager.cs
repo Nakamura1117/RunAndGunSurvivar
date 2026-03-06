@@ -1,6 +1,4 @@
-using JetBrains.Annotations;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BulletManager : MonoBehaviour
@@ -69,7 +67,6 @@ public class BulletManager : MonoBehaviour
         }
         AddBullet(maxRemaining);
         bulletRecover = null;
-
     }
 
     //画面上に簡易GUI表示
