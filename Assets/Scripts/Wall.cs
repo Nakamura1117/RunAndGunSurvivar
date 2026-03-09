@@ -73,11 +73,11 @@ public class Wall : MonoBehaviour
 
 
         if(tag == "Bullet") {
-            life -= player.gameObject.GetComponent<NomalShooter>().GetShootPower();
+            life -= player.gameObject.GetComponent<NormalShooter>().GetShootPower();
         }
         else if (tag == "Sword")
         {
-            life -= player.gameObject.GetComponent<NomalSword>().GetShootPower();
+            life -= player.gameObject.GetComponent<NormalSword>().GetSwordPower();
         }
 
 

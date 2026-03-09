@@ -37,7 +37,7 @@ public class Item : MonoBehaviour
                     other.gameObject.GetComponent<NormalShooter>().ShootPowerUp();
                     break;
                 case ItemType.LifeUp:
-                    other.gameObject.GetComponent<PlayerRun>().LifeUP();
+                    other.gameObject.GetComponent<PlayerRun>().LifeUp();
                     break;
             }
 

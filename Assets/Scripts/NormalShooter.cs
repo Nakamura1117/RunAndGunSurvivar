@@ -16,17 +16,17 @@ public class NormalShooter : MonoBehaviour
 
     GameObject bullets; //生成した弾をまとめるオブジェクト
 
-    const int maxShootPower 3;
+    const int maxShootPower = 3;
     int shootPower = 1;
-    [Header("ソードのスクリプト")]
-    public NomalSword normalSword;
+    //[Header("ソードのスクリプト")]
+    //public NomalSword normalSword;
 
     //InputAction(Playerマップ)のAttackアクションがおされたら
 
 
     void OnAttack(InputValue value)
     {
-        if (normalSword.GetIsSword()) return;
+        //if (normalSword.GetIsSword()) return;
 
         if(GameManager.gameState == GameState.retry)
         {

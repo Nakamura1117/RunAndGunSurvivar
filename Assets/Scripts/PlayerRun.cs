@@ -29,8 +29,8 @@ public class PlayerRun : MonoBehaviour
     public float speedJump = 8.0f;
     public float accelerationZ = 10.0f;
 
-    [Header("ソードのスクリプト")]
-    public NomalSword nomalSword;
+    //[Header("ソードのスクリプト")]
+    //public NomalSword nomalSword;
 
 
 
@@ -85,7 +85,7 @@ public class PlayerRun : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        if (nomalSword.IsNomalSword()) return;
+        //if (nomalSword.IsNomalSword()) return;
         if (resetIntervalCol == null)
         {
             
@@ -97,7 +97,7 @@ public class PlayerRun : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if (nomalSword.IsNomalSword()) return;
+        //if (nomalSword.IsNomalSword()) return;
         Jump();
     }
 

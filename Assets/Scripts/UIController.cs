@@ -39,7 +39,7 @@ public class UIController : MonoBehaviour
     void Start()
     {
         //各UIの更新
-        UpdateLife(player.GetComponent<PlayerRun>().Life());
+        UpdateLife(player.GetComponent<PlayerRun>().GetLife());
         UpdateBullet();
         UpdateMagazine();
         UpdateScore(ScoreManager.score);
