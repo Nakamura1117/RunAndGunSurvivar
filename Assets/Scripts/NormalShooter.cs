@@ -1,5 +1,4 @@
-using System.Collections;
-using Unity.VisualScripting;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -17,12 +16,32 @@ public class NormalShooter : MonoBehaviour
 
     GameObject bullets; //生成した弾をまとめるオブジェクト
 
+    const int maxShootPower 3;
+    int shootPower = 1;
+    [Header("ソードのスクリプト")]
+    public NomalSword normalSword;
+
     //InputAction(Playerマップ)のAttackアクションがおされたら
 
 
     void OnAttack(InputValue value)
     {
-        Shoot();
+        if (normalSword.GetIsSword()) return;
+
+        if(GameManager.gameState == GameState.retry)
+        {
+            GameManager.RetryScene();
+        }
+        else if(GameManager.gameState == GameState.result)
+        {
+            GameManager gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameManager>();
+            gm.NextScene(gm.nextScene);
+        }
+        else
+        {
+            Shoot();
+        }
+
     }
 
     void Shoot()
@@ -43,6 +62,28 @@ public class NormalShooter : MonoBehaviour
         {
             bulletManager.RecoverBullet();
         }
+    }
+
+    public void ShootPowerUp(int value = 1)
+    {
+        shootPower += value;
+        if (shootPower > maxShootPower) shootPower = maxShootPower;
+        GameObject canvas = GameObject.FindGameObjectWithTag("UI");
+        canvas.GetComponent<UIController>().UpdateGun();
+    }
+
+
+    public void ShootPowerDown(int value = 1)
+    {
+        shootPower -= value;
+        if (shootPower <= 0) shootPower = 1;
+        GameObject canvas = GameObject.FindGameObjectWithTag("UI");
+        canvas.GetComponent<UIController>().UpdateGun();
+    }
+
+    public int GetShootPower()
+    {
+        return shootPower;
     }
 
     void Start()

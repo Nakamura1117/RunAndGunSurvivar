@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class Wall : MonoBehaviour
@@ -21,6 +20,11 @@ public class Wall : MonoBehaviour
 
     Coroutine currentDamage; //ダメージコルーチン
 
+    [Header("スコア")]
+    public int scorePoint = 100;
+
+
+
     void Start()
     {
         startPosition = damageBody.transform.localPosition;
@@ -38,10 +42,11 @@ public class Wall : MonoBehaviour
     //衝突
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Bullets")
+        string tag = other.gameObject.tag;
+        if (tag == "Bullets" || tag == "Sword")
         {
             if (currentDamage != null) return;
-            currentDamage = StartCoroutine(DamageCol());
+            currentDamage = StartCoroutine(DamageCol(tag));
             if (life <= 0)
             {
                 CreateEffect();
@@ -62,9 +67,20 @@ public class Wall : MonoBehaviour
         }
     }
     //ダメージコルーチン
-    IEnumerator DamageCol()
+    IEnumerator DamageCol(string tag)
     {
-        life--;
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+
+        if(tag == "Bullet") {
+            life -= player.gameObject.GetComponent<NomalShooter>().GetShootPower();
+        }
+        else if (tag == "Sword")
+        {
+            life -= player.gameObject.GetComponent<NomalSword>().GetShootPower();
+        }
+
+
         yield return new WaitForSeconds(damegeTime);
         currentDamage = null;
         yield return new WaitForSeconds(0.1f);

@@ -29,6 +29,10 @@ public class PlayerRun : MonoBehaviour
     public float speedJump = 8.0f;
     public float accelerationZ = 10.0f;
 
+    [Header("ソードのスクリプト")]
+    public NomalSword nomalSword;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -41,6 +45,9 @@ public class PlayerRun : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (GameManager.gameState == GameState.stageclear || GameManager.gameState == GameState.result) return;
+
         //if (Input.GetKeyDown("left")) MoveToLeft();
         //if (Input.GetKeyDown("right")) MoveToRight(); 
         //if (Input.GetKeyDown("space")) Jump();
@@ -78,6 +85,7 @@ public class PlayerRun : MonoBehaviour
 
     void OnMove(InputValue value)
     {
+        if (nomalSword.IsNomalSword()) return;
         if (resetIntervalCol == null)
         {
             
@@ -89,6 +97,7 @@ public class PlayerRun : MonoBehaviour
 
     void OnJump(InputValue value)
     {
+        if (nomalSword.IsNomalSword()) return;
         Jump();
     }
 
@@ -97,10 +106,22 @@ public class PlayerRun : MonoBehaviour
         if (isStun()) return;
         if (hit.gameObject.tag =="Enemy")
         {
-            life--;
+            LifeDown();
+            GetComponent<NormalShooter>().ShootPowerDown();
             recoverTime = StunDuration;
-            //hit.gameObject.GetComponent<>.CreateEffect();
-            Destroy(hit.gameObject);
+
+            if (GetLife() <= 0) GameManager.gameState = GameState.gameover;
+
+            hit.gameObject.GetComponent<Wall>().CreateEffect();
+            //Destroy(hit.gameObject);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Goal")
+        {
+            GameManager.gameState = GameState.stageclear;
         }
     }
 
@@ -109,12 +130,22 @@ public class PlayerRun : MonoBehaviour
         return life;
     }
 
-    public void LifeUp()
+    public void LifeUp(int value = 1)
     {
-        if (life < DefaultLife)
-        {
-            life++;
-        }
+        life += value;
+        if (life > DefaultLife) life = DefaultLife;
+
+        GameObject canvas = GameObject.FindGameObjectWithTag("UI");
+        canvas.GetComponent<UIController>().UpdateLife(GetLife());
+    }
+
+    public void LifeDown(int value = 1)
+    {
+        life -= value;
+        if (life > DefaultLife) life = DefaultLife;
+
+        GameObject canvas = GameObject.FindGameObjectWithTag("UI");
+        canvas.GetComponent<UIController>().UpdateLife(GetLife());
     }
 
     private void Jump()

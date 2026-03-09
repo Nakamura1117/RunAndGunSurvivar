@@ -55,7 +55,8 @@ public class StageGenerator : MonoBehaviour
         GameObject stageObject = (GameObject)Instantiate(
             stageChips[nextStageChip],
             new Vector3(0, 0, chipIndex * StageChipSize),
-            Quaternion.identity);
+            Quaternion.identity,
+            gameObject.transform);
 
         return stageObject;
     }

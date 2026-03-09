@@ -16,6 +16,7 @@ public class BulletManager : MonoBehaviour
     Coroutine bulletRecover; //発生中のコルーチン情報の参照用
     float remainingTime = 0.0f;
 
+    public UIController ui;
 
     //弾の消費
     public void ConsumeBullet()
@@ -23,6 +24,7 @@ public class BulletManager : MonoBehaviour
         if (bulletRemaining > 0)
         {
             bulletRemaining--;
+            ui.UpdateBullet();
         }
     }
 
@@ -32,11 +34,17 @@ public class BulletManager : MonoBehaviour
         return bulletRemaining;
     }
 
+    public int GetMagazineRemaining()
+    {
+        return magazine;
+    }
+
     //弾の充填
 
     public void AddBullet()
     {
         bulletRemaining = maxRemaining;
+        ui.UpdateBullet();
     }
     public void AddBullet(int num)
     {
@@ -52,6 +60,7 @@ public class BulletManager : MonoBehaviour
             {
                 bulletRecover = StartCoroutine(RecoverBulletCol(recoveryTime));
                 magazine--;
+                ui.UpdateMagazine();
             }
         }
     }
@@ -70,29 +79,29 @@ public class BulletManager : MonoBehaviour
     }
 
     //画面上に簡易GUI表示
-    void OnGUI()
-    {
-        string label;
-        if (bulletRecover != null)
-        {
-            GUI.color = Color.red;
-            if (Mathf.Sin(Time.time) * 50 > 0)
-            {
-                label = "";
-            }
-            else
-            {
-                label = "bulletRecover:" + remainingTime;
-            }
-            GUI.Label(new Rect(50, 25, 150, 50), label);
-        }
+    //void OnGUI()
+    //{
+    //    string label;
+    //    if (bulletRecover != null)
+    //    {
+    //        GUI.color = Color.red;
+    //        if (Mathf.Sin(Time.time) * 50 > 0)
+    //        {
+    //            label = "";
+    //        }
+    //        else
+    //        {
+    //            label = "bulletRecover:" + remainingTime;
+    //        }
+    //        GUI.Label(new Rect(50, 25, 150, 50), label);
+    //    }
 
-        GUI.color = Color.black;
-        label = "bullet:" + bulletRemaining;
-        GUI.Label(new Rect(50,50, 100, 50), label);
+    //    GUI.color = Color.black;
+    //    label = "bullet:" + bulletRemaining;
+    //    GUI.Label(new Rect(50,50, 100, 50), label);
 
-        GUI.color = Color.black;
-        label = "magazin:" + magazine;
-        GUI.Label(new Rect(50, 75, 150, 50), label);
-    }
+    //    GUI.color = Color.black;
+    //    label = "magazin:" + magazine;
+    //    GUI.Label(new Rect(50, 75, 150, 50), label);
+    //}
 }

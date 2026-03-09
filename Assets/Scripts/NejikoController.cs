@@ -13,16 +13,16 @@ public class NejikoController : MonoBehaviour
     public float speedz;
     public float speedJump;
 
-    const int MinLane = -2;
-    const int MaxLane = 2;
-    const float LaneWidth = 1.0f;
-    const int DefaultLife = 3;
-    const float StunDuration = 0.5f;
+    //const int MinLane = -2;
+    //const int MaxLane = 2;
+    //const float LaneWidth = 1.0f;
+    //const int DefaultLife = 3;
+    //const float StunDuration = 0.5f;
 
-    int targetRane;
-    int line = DefaultLife;
-    float recoverTime = 0.0f;
-    float currentMoveInputX;
+    //int targetRane;
+    //int line = DefaultLife;
+    //float recoverTime = 0.0f;
+    //float currentMoveInputX;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
