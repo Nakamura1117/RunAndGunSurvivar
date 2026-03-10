@@ -43,7 +43,7 @@ public class Wall : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         string tag = other.gameObject.tag;
-        if (tag == "Bullets" || tag == "Sword")
+        if (tag == "Bullet" || tag == "Sword")
         {
             if (currentDamage != null) return;
             currentDamage = StartCoroutine(DamageCol(tag));
@@ -63,6 +63,7 @@ public class Wall : MonoBehaviour
                 transform.position,
                 Quaternion.identity,
                 gameObject.transform);
+            ScoreManager.ScoreUp(scorePoint);
             Destroy(gameObject);
         }
     }
@@ -70,7 +71,6 @@ public class Wall : MonoBehaviour
     IEnumerator DamageCol(string tag)
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-
 
         if(tag == "Bullet") {
             life -= player.gameObject.GetComponent<NormalShooter>().GetShootPower();

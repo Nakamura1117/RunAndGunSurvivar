@@ -35,16 +35,18 @@ public class ObjectGenerator : MonoBehaviour
 
     void Update()
     {
-        //ゴール生成済みでももう何もしない
+        //Debug.Log("Update : ObjectGenerator");
+
+        // ゴール生成済みでももう何もしない
         if (GameManager.gameState == GameState.gameover || GameManager.gameState == GameState.retry || createGoal) return;
 
-        //目標座標が来たらゴール生成コルーチンとゴール生成フラグをON
+        // 目標座標が来たらゴール生成コルーチンとゴール生成フラグをON
         if (transform.position.z > goalPosition)
         {
             StartCoroutine(GoalObjectGenerateCol());
             createGoal = true;
         }
-        else //そうでなければエネミー・アイテム・トラップをそれぞれ独立して生成していく
+        else // そうでなければエネミー・アイテム・トラップをそれぞれ独立して生成していく
         {
             if (enemyObjectGenerateCol == null)
             {
@@ -65,6 +67,9 @@ public class ObjectGenerator : MonoBehaviour
     //エネミー生成コルーチン
     IEnumerator EnemyObjectGenerateCol()
     {
+
+        //Debug.Log("ObjectGenerator EnemyObjectCol");
+
         //ランダムな数字を取得してウェイト
         float generationInterval = Random.Range(1, maxEnemyIntervalTime + 1.0f);
         yield return new WaitForSeconds(generationInterval);
@@ -85,6 +90,8 @@ public class ObjectGenerator : MonoBehaviour
     //トラップ生成コルーチン
     IEnumerator TrapObjectGenerateCol()
     {
+        //Debug.Log("ObjectGenerator TrapObjectCol");
+
         //ランダムな数字を取得してウェイト
         float generationInterval = Random.Range(1, maxTrapIntervalTime + 1.0f);
         yield return new WaitForSeconds(generationInterval);
@@ -102,6 +109,8 @@ public class ObjectGenerator : MonoBehaviour
     //アイテム生成コルーチン
     IEnumerator ItemObjectGenerateCol()
     {
+        //Debug.Log("ObjectGenerator ItemObjectCol");
+
         //ランダムな数字を取得してウェイト
         float generationInterval = Random.Range(5, maxItemIntervalTime + 1.0f);
         yield return new WaitForSeconds(generationInterval);
@@ -129,6 +138,8 @@ public class ObjectGenerator : MonoBehaviour
     //ゴール生成コルーチン
     IEnumerator GoalObjectGenerateCol()
     {
+        //Debug.Log("ObjectGenerator GoalObjectCol");
+
         yield return new WaitForSeconds(15.0f); //他のオブジェクトの生成があらかた終わるまでまつ
         //ゴールの生成
         Instantiate(

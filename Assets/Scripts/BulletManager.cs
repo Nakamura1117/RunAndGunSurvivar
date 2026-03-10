@@ -40,12 +40,6 @@ public class BulletManager : MonoBehaviour
     }
 
     //弾の充填
-
-    //public void AddBullet()
-    //{
-    //    bulletRemaining = maxRemaining;
-    //    ui.UpdateBullet();
-    //}
     public void AddBullet(int num = maxRemaining)
     {
         bulletRemaining = num;

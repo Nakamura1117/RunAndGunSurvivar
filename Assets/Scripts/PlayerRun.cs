@@ -1,5 +1,4 @@
 using System.Collections;
-using System.IO.IsolatedStorage;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,8 +28,8 @@ public class PlayerRun : MonoBehaviour
     public float speedJump = 8.0f;
     public float accelerationZ = 10.0f;
 
-    //[Header("ソードのスクリプト")]
-    //public NomalSword nomalSword;
+    [Header("ソードのスクリプト")]
+    public NormalSword normalSword;
 
 
 
@@ -38,6 +37,7 @@ public class PlayerRun : MonoBehaviour
     void Start()
     {
         GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+        GameManager.gameState = GameState.gameplay;
         controller = GetComponent<CharacterController>();
         //animator = GetComponent<Animator>();
     }
@@ -52,11 +52,11 @@ public class PlayerRun : MonoBehaviour
         //if (Input.GetKeyDown("right")) MoveToRight(); 
         //if (Input.GetKeyDown("space")) Jump();
 
-        if (currentMoveInputX > 0)
+        if (currentMoveInputX < 0)
         {
             MoveToLeft();
         }
-        else if (currentMoveInputX < 0)
+        else if (currentMoveInputX > 0)
         {
             MoveToRight();
         }
@@ -75,8 +75,8 @@ public class PlayerRun : MonoBehaviour
             float ratioX = (targetLane * LaneWidth - transform.position.x) / LaneWidth;
             moveDirection.x = ratioX * speedX;
 
-            moveDirection.y -= gravity* Time.deltaTime;
-            controller.Move(moveDirection*Time.deltaTime);
+            moveDirection.y -= gravity * Time.deltaTime;
+            controller.Move(moveDirection * Time.deltaTime);
 
             if (controller.isGrounded) moveDirection.y = 0;
         }
@@ -85,19 +85,18 @@ public class PlayerRun : MonoBehaviour
 
     void OnMove(InputValue value)
     {
-        //if (nomalSword.IsNomalSword()) return;
+        if (normalSword.GetIsSword()) return;
         if (resetIntervalCol == null)
         {
-            
             Vector2 axisX = value.Get<Vector2>();
             currentMoveInputX = axisX.x;
-            Debug.Log(currentMoveInputX);
+            //Debug.Log(currentMoveInputX);
         }
     }
 
     void OnJump(InputValue value)
     {
-        //if (nomalSword.IsNomalSword()) return;
+        if (normalSword.GetIsSword()) return;
         Jump();
     }
 

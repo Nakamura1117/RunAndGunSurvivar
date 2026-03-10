@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -78,7 +77,7 @@ public class UIController : MonoBehaviour
     //スコアの更新
     public void UpdateScore(int value)
     {
-        scoreText.text = value.ToString();
+        scoreText.text = value.ToString("N0");
     }
 
     //リロード点滅
