@@ -58,6 +58,7 @@ public class Wall : MonoBehaviour
     {
         if (effectPrefab != null)
         {
+            Debug.Log(effectPrefab.name);
             Instantiate(
                 effectPrefab,
                 transform.position,

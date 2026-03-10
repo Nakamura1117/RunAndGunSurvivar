@@ -107,7 +107,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &4363260574867783345
 MonoBehaviour:
@@ -127,6 +127,7 @@ MonoBehaviour:
   damageBody: {fileID: 6958410930017408553}
   speed: 75
   amplitude: 1.5
+  scorePoint: 100
 --- !u!1 &6958410930017408553
 GameObject:
   m_ObjectHideFlags: 0

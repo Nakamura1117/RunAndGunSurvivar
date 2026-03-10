@@ -12,7 +12,10 @@ public class PlayerRun : MonoBehaviour
     const float StunDuration = 0.5f;
 
     CharacterController controller;
-    //Animator animator;
+
+    public GameObject animeBody;
+    Animator animator;
+    bool isAnime;
 
     Vector3 moveDirection = Vector3.zero;
     int targetLane;
@@ -39,7 +42,7 @@ public class PlayerRun : MonoBehaviour
         GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         GameManager.gameState = GameState.gameplay;
         controller = GetComponent<CharacterController>();
-        //animator = GetComponent<Animator>();
+        animator = animeBody.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -109,9 +112,19 @@ public class PlayerRun : MonoBehaviour
             GetComponent<NormalShooter>().ShootPowerDown();
             recoverTime = StunDuration;
 
-            if (GetLife() <= 0) GameManager.gameState = GameState.gameover;
+
+            if (GetLife() <= 0)
+            {
+                GameManager.gameState = GameState.gameover;
+                if (!(isAnime))
+                {
+                    animator.SetTrigger("retry");
+                    isAnime = true;
+                }
+            }
 
             hit.gameObject.GetComponent<Wall>().CreateEffect();
+            animator.SetTrigger("damage");
             //Destroy(hit.gameObject);
         }
     }
@@ -121,6 +134,11 @@ public class PlayerRun : MonoBehaviour
         if(other.gameObject.tag == "Goal")
         {
             GameManager.gameState = GameState.stageclear;
+            if (!(isAnime))
+            {
+                animator.SetTrigger("goal");
+                isAnime = true;
+            }
         }
     }
 
@@ -153,6 +171,7 @@ public class PlayerRun : MonoBehaviour
         if (controller.isGrounded)
         {
             moveDirection.y = speedJump;
+            animator.SetTrigger("jump");
         }
     }
 
