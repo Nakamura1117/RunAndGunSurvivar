@@ -11,5 +11,12 @@ https://assetstore.unity.com/packages/3d/environments/urban/low-poly-street-pack
 Free Quick Effects Vol. 1
 https://assetstore.unity.com/packages/vfx/particles/free-quick-effects-vol-1-304424
 
+Russian buildings lowpoly pack
+https://assetstore.unity.com/packages/3d/environments/urban/russian-buildings-lowpoly-pack-80518
+
+Fantasy Skybox FREE
+https://assetstore.unity.com/packages/2d/textures-materials/sky/fantasy-skybox-free-18353
+
+
 エフェクト参考
 https://creator.cluster.mu/2023/04/19/explosion_particle/

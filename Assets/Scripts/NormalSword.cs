@@ -14,6 +14,11 @@ public class NormalSword : MonoBehaviour
     Coroutine swordAttackCol; //発生中コルーチン
     bool isSword; //外部に参照させるソード発生中フラグ
 
+    AudioSource[] playerAudio;
+    [Header("SE音源")]
+    public AudioClip se_Sword;
+
+
     void OnCrouch(InputValue value)
     {
         SwordAttack();
@@ -22,6 +27,8 @@ public class NormalSword : MonoBehaviour
     {
         //初期状態では存在しない
         swordObject.SetActive(false);
+
+        playerAudio = GetComponents<AudioSource>();
     }
 
     //存在させる
@@ -31,6 +38,8 @@ public class NormalSword : MonoBehaviour
         {
             //コルーチン発動によりソードを存在させる
             swordAttackCol = StartCoroutine(SwordAttackCol());
+
+            playerAudio[0].PlayOneShot(se_Sword);
         }
     }
 

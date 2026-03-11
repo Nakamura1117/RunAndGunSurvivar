@@ -85,6 +85,7 @@ public class UIController : MonoBehaviour
     {
         //リロードコルーチンの発生
         reloadEndCol = StartCoroutine(ReloadEndCol());
+        reloadPanel.SetActive(true);
     }
 
     //リロードコルーチン

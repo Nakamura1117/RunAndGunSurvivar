@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Wall : MonoBehaviour
@@ -23,11 +24,14 @@ public class Wall : MonoBehaviour
     [Header("スコア")]
     public int scorePoint = 100;
 
-
+    AudioSource[] enemyAudio;
+    [Header("SE音源")]
+    public AudioClip se_Damage;
 
     void Start()
     {
         startPosition = damageBody.transform.localPosition;
+        enemyAudio = GetComponents<AudioSource>();
     }
 
     void Update()
@@ -46,6 +50,7 @@ public class Wall : MonoBehaviour
         if (tag == "Bullet" || tag == "Sword")
         {
             if (currentDamage != null) return;
+            enemyAudio[0].PlayOneShot(se_Damage);
             currentDamage = StartCoroutine(DamageCol(tag));
             if (life <= 0)
             {
@@ -58,12 +63,10 @@ public class Wall : MonoBehaviour
     {
         if (effectPrefab != null)
         {
-            Debug.Log(effectPrefab.name);
-            Instantiate(
+            GameObject deefeatEffect = Instantiate(
                 effectPrefab,
                 transform.position,
-                Quaternion.identity,
-                gameObject.transform);
+                Quaternion.identity);
             ScoreManager.ScoreUp(scorePoint);
             Destroy(gameObject);
         }
@@ -73,7 +76,8 @@ public class Wall : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        if(tag == "Bullet") {
+        if (tag == "Bullet")
+        {
             life -= player.gameObject.GetComponent<NormalShooter>().GetShootPower();
         }
         else if (tag == "Sword")

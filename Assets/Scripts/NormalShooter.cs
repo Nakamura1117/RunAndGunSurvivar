@@ -23,16 +23,20 @@ public class NormalShooter : MonoBehaviour
 
     //InputAction(Playerマップ)のAttackアクションがおされたら
 
+    AudioSource[] playerAudio;
+    [Header("SE音源")]
+    public AudioClip se_Shot;
+
 
     void OnAttack(InputValue value)
     {
         //if (normalSword.GetIsSword()) return;
 
-        if(GameManager.gameState == GameState.retry)
+        if (GameManager.gameState == GameState.retry)
         {
             GameManager.RetryScene();
         }
-        else if(GameManager.gameState == GameState.result)
+        else if (GameManager.gameState == GameState.result)
         {
             GameManager gm = GameObject.FindGameObjectWithTag("GM").GetComponent<GameManager>();
             gm.NextScene(gm.nextScene);
@@ -48,6 +52,7 @@ public class NormalShooter : MonoBehaviour
     {
         if (bulletManager.GetBulletRemaining() > 0)
         {
+            playerAudio[0].PlayOneShot(se_Shot);
             GameObject obj = Instantiate(
                 bulletPrefabs,
                 gate.transform.position,
@@ -89,5 +94,7 @@ public class NormalShooter : MonoBehaviour
     void Start()
     {
         bullets = GameObject.FindGameObjectWithTag("Bullets");
+
+        playerAudio = GetComponents<AudioSource>();
     }
 }

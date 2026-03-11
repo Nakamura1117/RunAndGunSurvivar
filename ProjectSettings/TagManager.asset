@@ -11,6 +11,7 @@ TagManager:
   - Goal
   - GM
   - Sword
+  - EventSystem
   layers:
   - Default
   - TransparentFX

@@ -7,7 +7,7 @@ public class PlayerRun : MonoBehaviour
 
     const int MinLane = -2;
     const int MaxLane = 2;
-    const float LaneWidth = 1.0f;
+    const float LaneWidth = 2.5f;
     const int DefaultLife = 3;
     const float StunDuration = 0.5f;
 
@@ -34,15 +34,39 @@ public class PlayerRun : MonoBehaviour
     [Header("ソードのスクリプト")]
     public NormalSword normalSword;
 
+    AudioSource[] playerAudio;
+    float footstepInterval = 0.3f;
+    float footstepTimer;
 
+    [Header("SE音源")]
+    public AudioClip se_Walk;
+    public AudioClip se_Damage;
+    public AudioClip se_Explosion;
+    public AudioClip se_Jump;
+    public AudioClip se_Dash;
+    public AudioClip se_Reload;
+
+    // PlayerオブジェクトについているAudioSouceの１番目は「Player」自身のオーディオ
+    private static readonly int audioPlayer = 0;
+    // PlayerオブジェクトについているAudioSouceの２番目は「Walk（歩き）」のオーディオ
+    private static readonly int audioWalk = 1;
+    // PlayerオブジェクトについているAudioSouceの３番目が「Damage（ダメージ時）」のオーディオ
+    private static readonly int audioDamage = 2;
+
+    void Awake()
+    {
+        GetComponent<PlayerInput>().enabled = false;
+        Invoke("ControllerOn", 1.0f);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
         GameManager.gameState = GameState.gameplay;
         controller = GetComponent<CharacterController>();
         animator = animeBody.GetComponent<Animator>();
+
+        playerAudio = GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -83,7 +107,11 @@ public class PlayerRun : MonoBehaviour
 
             if (controller.isGrounded) moveDirection.y = 0;
         }
+    }
 
+    void FixedUpdate()
+    {
+        HandleFootsteps();
     }
 
     void OnMove(InputValue value)
@@ -93,7 +121,6 @@ public class PlayerRun : MonoBehaviour
         {
             Vector2 axisX = value.Get<Vector2>();
             currentMoveInputX = axisX.x;
-            //Debug.Log(currentMoveInputX);
         }
     }
 
@@ -106,8 +133,10 @@ public class PlayerRun : MonoBehaviour
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
         if (isStun()) return;
-        if (hit.gameObject.tag =="Enemy")
+        if (hit.gameObject.tag == "Enemy")
         {
+            playerAudio[audioDamage].PlayOneShot(se_Damage);
+
             LifeDown();
             GetComponent<NormalShooter>().ShootPowerDown();
             recoverTime = StunDuration;
@@ -125,20 +154,24 @@ public class PlayerRun : MonoBehaviour
 
             hit.gameObject.GetComponent<Wall>().CreateEffect();
             animator.SetTrigger("damage");
+
             //Destroy(hit.gameObject);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Goal")
+        if (other.gameObject.tag == "Goal")
         {
             GameManager.gameState = GameState.stageclear;
             if (!(isAnime))
             {
                 animator.SetTrigger("goal");
                 isAnime = true;
+
+                playerAudio[audioPlayer].PlayOneShot(se_Reload);
             }
+            Destroy(other.gameObject);
         }
     }
 
@@ -183,6 +216,8 @@ public class PlayerRun : MonoBehaviour
             targetLane--;
             currentMoveInputX = 0;
             StartCoroutine(ResetIntervalCol());
+
+            playerAudio[audioPlayer].PlayOneShot(se_Dash);
         }
     }
     private void MoveToRight()
@@ -193,6 +228,8 @@ public class PlayerRun : MonoBehaviour
             targetLane++;
             currentMoveInputX = 0;
             StartCoroutine(ResetIntervalCol());
+
+            playerAudio[audioPlayer].PlayOneShot(se_Dash);
         }
     }
 
@@ -201,9 +238,37 @@ public class PlayerRun : MonoBehaviour
         return (recoverTime > 0 || life <= 0);
     }
 
+    void HandleFootsteps()
+    {
+        //地面にいてプレイヤーが動いていれば
+        if (controller.isGrounded && moveDirection.z != 0)
+        {
+            footstepTimer += Time.deltaTime; //時間計測
+
+            if (footstepTimer >= footstepInterval) //インターバルチェック
+            {
+                playerAudio[audioWalk].PlayOneShot(se_Walk);
+                footstepTimer = 0;
+            }
+        }
+        else //動いていなければ時間計測リセット
+        {
+            footstepTimer = 0f;
+        }
+    }
+
+    void ControllerOn()
+    {
+        PlayerInput playerInput = GetComponent<PlayerInput>();
+        playerInput.enabled = true;
+        playerInput.SwitchCurrentActionMap("Player");
+    }
+
     IEnumerator ResetIntervalCol()
     {
         yield return new WaitForSeconds(0.1f);
         resetIntervalCol = null;
     }
+
+
 }

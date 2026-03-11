@@ -18,6 +18,16 @@ public class BulletManager : MonoBehaviour
 
     public UIController ui;
 
+    AudioSource[] playerAudio;
+    [Header("SE音源")]
+    public AudioClip se_Reload;
+
+    void Start()
+    {
+        playerAudio = GetComponents<AudioSource>();
+    }
+
+
     //弾の消費
     public void ConsumeBullet()
     {
@@ -61,6 +71,8 @@ public class BulletManager : MonoBehaviour
             {
                 bulletRecover = StartCoroutine(RecoverBulletCol(recoveryTime));
                 magazine--;
+                playerAudio[0].PlayOneShot(se_Reload);
+                ui.Reloding();
                 ui.UpdateMagazine();
             }
         }
@@ -71,7 +83,8 @@ public class BulletManager : MonoBehaviour
     {
         const float minCnt = 1.0f;
         remainingTime = waitTime;
-        while (remainingTime > 0) { 
+        while (remainingTime > 0)
+        {
             yield return new WaitForSeconds(minCnt);
             remainingTime -= minCnt;
         }
